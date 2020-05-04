@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+
+##################################
+# Setup Node API Container       #
+##################################
+  tsf-server:
+    container_name: tsf-server
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      SERVER_HOST: ${SERVER_HOST}
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    volumes:
+      - ./api:/tsf-server
+      - /tsf-server/node_modules
+    command: npm start
+
+##################################
+# Setup REACT Client Container   #
+##################################
+  tsf-client:
+    container_name: tsf-app
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    volumes:
+      - ./client:/tsf-app
+      - /tsf-app/node_modules
+    depends_on:
+      - tsf-server
+    command: npm start
