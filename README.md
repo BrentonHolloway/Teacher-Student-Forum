@@ -17,3 +17,13 @@ https://medium.com/@xiaolishen/develop-in-docker-a-node-backend-and-a-react-fron
 # React Scripts v3.4.1 fails to start in Docker
 
 https://github.com/facebook/create-react-app/issues/8688
+
+# Project
+## Requirements
+- Docker
+- Node
+
+## Starting Project
+1. Install Docker
+2. In the root folder run the following command to create and run a docker image.</br>
+<code>docker-compose up --build</code>
