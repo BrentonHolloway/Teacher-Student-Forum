@@ -20,8 +20,8 @@ https://github.com/facebook/create-react-app/issues/8688
 
 # Project
 ## Requirements
-- Docker
-- Node
+- Docker -> Docker can be downloaded here: https://www.docker.com/products/docker-desktop
+- Node 12.16 -> Node can be downloaded here: https://nodejs.org/en/
 
 ## Starting Project
 1. Install Docker
