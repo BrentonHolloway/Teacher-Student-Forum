@@ -12,7 +12,6 @@ class Dashboard extends Component {
         }
     }
     
-
     test() {
         fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/test/server')
         .then(res => res.json())
@@ -33,9 +32,10 @@ class Dashboard extends Component {
                     </div>
                     <div className="container">
                         <p>API status: {this.state.status}</p>
+                        <p>{localStorage.getItem('user')}</p>
                     </div>
                 </main>
-                <Footer messageLeft={"Forum"} messageRight={""}/>
+                <Footer messageLeft={"Welcome: "+JSON.parse(localStorage.getItem('user')).fname+" "+JSON.parse(localStorage.getItem('user')).lname} messageRight={""}/>
             </div>
         )
     }

@@ -3,6 +3,14 @@ class Auth {
   constructor() {
     this.authenticated = false;
   }
+
+  handleResponse = res => {
+    console.log(res)
+    if(res.status === 200) {
+      return res.json()
+    }
+    throw new Error(res.message);
+  }
   
   login = (cb, email, password, err) => {
     fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/auth/login', {
@@ -15,30 +23,37 @@ class Auth {
             password: password
           })
         })
-        .then((response) => {
-    
-          if (response.status === 200) {
-            this.setSession(response.body);
-            cb();
-          } else {
-            err("Invalid Username or Password");
+        .then((res) => {
+          if(res.status === 200) {
+            return res.json()
           }
+          throw new Error('User Not Found');
         })
+        .then((res) => {
+          this.setSession(res);
+          cb();
+        })
+        .catch(err => console.error(err))
   }
 
   setSession = (body) => {
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify((64000) + new Date().getTime());
-    localStorage.setItem('access_token', body.clearance);
-    localStorage.setItem('id_token', body.user_id);
+    console.log(body)
+    localStorage.setItem('user', JSON.stringify({
+      id: body.user.id,
+      fname: body.user.fname,
+      lname: body.user.lname,
+      email: body.user.email,
+      role: body.user.role,
+      profile: body.user.profile
+    }))
     localStorage.setItem('expires_at', expiresAt);
   }  
 
   // removes user details from localStorage
   logout = (cb) => {
     // Clear access token and ID token from local storage
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     cb();
   }

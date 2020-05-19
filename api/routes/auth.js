@@ -39,28 +39,36 @@ createPool();
 router.post('/login', async (req, res) => {
 
   try {
+    console.log(req.body);
     // console.log(pool.pool.config.connectionConfig);
     //Create new deposit record
-    const getUserDetails = 'select password from users where email="' + req.body.email + '";';
+    const getUserDetails = 'select * from users where email="' + req.body.email + '";';
 
     //Run query - fetch response
     var userDetails = await pool.query(getUserDetails);
 
     if (userDetails.length < 1) {
-      res.status(403).send({message: 'Unkown E-Mail'}).end();
+      res.status(403).send({message: 'Unkown E-Mail'});
     }
     else if (userDetails[0].password === req.body.password) {
-      res.status(200).send(userDetails[0]).end();
+      res.status(200).send({
+        user: {
+          id: userDetails[0].id,
+          fname: userDetails[0].first_name,
+          lname: userDetails[0].last_name,
+          email: userDetails[0].email,
+          role: userDetails[0].role,
+          profile: userDetails[0].profile
+        }
+      });
     }
     else {
-      res.status(403).send({message: 'Incorrect Password'}).end();
+      res.status(403).send({message: 'Incorrect Password'});
     }
   } catch (err) {
-    res.status(500).send('Connection error!').end();
+    res.status(500).send({message: 'Connection error!'});
   }
 });
-
-module.exports = router;
 
 /* Register User (Teacher or Student) */
 router.post('/register', function(req, res, next) {
