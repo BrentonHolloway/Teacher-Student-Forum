@@ -38,8 +38,8 @@ class Auth {
 
   setSession = (body) => {
     // Set the time that the access token will expire at
-    let expiresAt = JSON.stringify((64000) + new Date().getTime());
-    console.log(body)
+    //let expiresAt = JSON.stringify((64000) + new Date().getTime());
+    // console.log(body)
     localStorage.setItem('user', JSON.stringify({
       id: body.user.id,
       fname: body.user.fname,
@@ -48,22 +48,19 @@ class Auth {
       role: body.user.role,
       profile: body.user.profile
     }))
-    localStorage.setItem('expires_at', expiresAt);
+    this.authenticated = true;
   }  
 
   // removes user details from localStorage
   logout = (cb) => {
-    // Clear access token and ID token from local storage
-    localStorage.removeItem('expires_at');
+    localStorage.removeItem('user');
+    this.authenticated = false;
     cb();
   }
 
   // checks if the user is authenticated
   isAuthenticated = () => {
-    // Check whether the current time is past the
-    // access token's expiry time
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return new Date().getTime() < expiresAt;
+    return this.authenticated
   }
 }
 
