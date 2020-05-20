@@ -50,7 +50,7 @@ class Profile extends Component {
             url: process.env.REACT_APP_API_SERVER_ADDRESS+'/media/profile/upload',
             data: formData,
         }).then(res => {
-            if(res.status == 200) {
+            if(res.status === 200) {
                 var user = JSON.parse(sessionStorage.getItem('user'));
                 user.profile = res.data.profile;
                 sessionStorage.setItem('user', JSON.stringify(user)); 
