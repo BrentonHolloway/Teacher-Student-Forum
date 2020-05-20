@@ -58,7 +58,7 @@ class Header extends Component {
                     {this.props.items.profile ?
                         <li>
                             <Link to={this.props.items.profile.link}>
-                                <img className="profile px-1" src={'https://storage.googleapis.com/teacher-student-forum-files/'+JSON.parse(localStorage.getItem('user')).profile} alt="Profile"/>
+                                <img className="profile px-1" src={'https://storage.googleapis.com/teacher-student-forum-files/'+JSON.parse(sessionStorage.getItem('user')).profile} alt="Profile"/>
                             </Link>
                         </li>
                         :'' }

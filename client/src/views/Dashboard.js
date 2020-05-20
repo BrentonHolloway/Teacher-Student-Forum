@@ -26,16 +26,12 @@ class Dashboard extends Component {
         return (
             <div>
                 <Header items={this.props.headerItems} titleLink={this.props.titleLink} {...this.props}/>
-                <main className="container row bg-light">
+                <main className="row justify-content-center">
                     <div className="container">
-                        <p>Authenticated</p>
-                    </div>
-                    <div className="container">
-                        <p>API status: {this.state.status}</p>
-                        <p>{localStorage.getItem('user')}</p>
+                        <p>Welcome</p>
                     </div>
                 </main>
-                <Footer messageLeft={"Welcome: "+JSON.parse(localStorage.getItem('user')).fname+" "+JSON.parse(localStorage.getItem('user')).lname} messageRight={""}/>
+                <Footer messageLeft={"Welcome: "+JSON.parse(sessionStorage.getItem('user')).fname+" "+JSON.parse(sessionStorage.getItem('user')).lname} messageRight={""}/>
             </div>
         )
     }

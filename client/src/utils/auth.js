@@ -40,27 +40,30 @@ class Auth {
     // Set the time that the access token will expire at
     //let expiresAt = JSON.stringify((64000) + new Date().getTime());
     // console.log(body)
-    localStorage.setItem('user', JSON.stringify({
+    
+    sessionStorage.setItem('user', JSON.stringify({
       id: body.user.id,
       fname: body.user.fname,
       lname: body.user.lname,
       email: body.user.email,
       role: body.user.role,
       profile: body.user.profile
-    }))
-    this.authenticated = true;
+    }));
+    sessionStorage.setItem('authenticated', true);
+    //this.authenticated = true;
   }  
 
   // removes user details from localStorage
   logout = (cb) => {
-    localStorage.removeItem('user');
-    this.authenticated = false;
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('authenticated');
+    //this.authenticated = false;
     cb();
   }
 
   // checks if the user is authenticated
   isAuthenticated = () => {
-    return this.authenticated
+    return sessionStorage.getItem('authenticated');
   }
 }
 

@@ -44,16 +44,16 @@ class Profile extends Component {
     fileUploadHandler = (event) => {
         let formData = new FormData();
         formData.append('file', this.state.selectedFile, this.state.selectedFile.name);
-        formData.set('user_id', JSON.parse(localStorage.getItem('user')).id);
+        formData.set('user_id', JSON.parse(sessionStorage.getItem('user')).id);
         axios({
             method: 'post',
             url: process.env.REACT_APP_API_SERVER_ADDRESS+'/media/profile/upload',
             data: formData,
-        }, {
-            onUploadProgress: ProgressEvent => {
-                this.setState({
-                    loaded: (ProgressEvent.loaded / ProgressEvent.total*100)
-                })
+        }).then(res => {
+            if(res.status == 200) {
+                var user = JSON.parse(sessionStorage.getItem('user'));
+                user.profile = res.data.profile;
+                sessionStorage.setItem('user', JSON.stringify(user)); 
             }
         })
     }
@@ -68,9 +68,6 @@ class Profile extends Component {
                         <div className="form-group file">
                             <label htmlFor="file">Upload Your Profile Picture</label>
                             <input name="file" type="file" className="form-control" onChange={this.fileSelectedHandler}/>
-                        </div>
-                        <div className="form-group">
-                            <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2)}%</Progress>
                         </div>
                         <button className="btn btn-success btn-block" onClick={this.fileUploadHandler}>Upload</button>
                     </div>

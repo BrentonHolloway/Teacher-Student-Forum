@@ -83,7 +83,10 @@ router.post('/profile/upload', multer.single('file'), (req, res, next) => {
             const publicUrl = format(
                 `https://storage.googleapis.com/${bucket.name}/${blob.name}`
             );
-            res.status(200).send(publicUrl);
+            res.status(200).json({
+                publicURL: publicUrl,
+                profile: blob.name
+            });
         });
     
         blobStream.end(req.file.buffer);
