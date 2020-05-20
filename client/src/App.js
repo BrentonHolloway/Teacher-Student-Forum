@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import ProtectedRoute from './utils/protected.route';
+import PublicRoute from './utils/public.route';
 import Login from './views/Login';
 import SignUp from './views/SignUp';
 import Dashboard from './views/Dashboard';
@@ -43,8 +44,8 @@ class App extends Component {
 				<Router>
 					<Switch>
 						<Route exact path="/" component={(props) => <Landing {...props} headerItems={auth.isAuthenticated() ? AuthHeaderProps : unAuthHeaderProps}/>} />
-						<Route path="/login" component={(props) => <Login {...props} headerItems={auth.isAuthenticated() ? AuthHeaderProps : unAuthHeaderProps}/>}/>
-						<Route path="/signup" component={(props) => <SignUp {...props} headerItems={auth.isAuthenticated() ? AuthHeaderProps : unAuthHeaderProps}/>}/>
+						<PublicRoute path="/login" component={(props) => <Login {...props} headerItems={auth.isAuthenticated() ? AuthHeaderProps : unAuthHeaderProps}/>}/>
+						<PublicRoute path="/signup" component={(props) => <SignUp {...props} headerItems={auth.isAuthenticated() ? AuthHeaderProps : unAuthHeaderProps}/>}/>
 						<ProtectedRoute path="/dashboard" component={(props) => <Dashboard {...props} headerItems={AuthHeaderProps}/>}/>
 						<ProtectedRoute path="/profile" component={(props) => <Profile {...props} headerItems={AuthHeaderProps}/>}/>
 						<Route path="*" component={Error404}/>
