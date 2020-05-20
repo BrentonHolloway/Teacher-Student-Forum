@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users
     role int NOT NULL,
     email varchar(25) NOT NULL UNIQUE,
     password char(255) NOT NULL,
+    profile varchar(128) NOT NULL DEFAULT 'default.png',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 

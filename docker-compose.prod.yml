@@ -34,8 +34,8 @@ services:
 
   cloud-sql-proxy:
     image: gcr.io/cloudsql-docker/gce-proxy:1.16
-    command: /cloud_sql_proxy -instances=teacher-student-forum:australia-southeast1:teacher-student-forum=tcp:3306 -credential_file=/config/gcloud-cloud-sql-credentials.json
+    command: /cloud_sql_proxy -instances=teacher-student-forum:australia-southeast1:teacher-student-forum=tcp:3306 -credential_file=/config/sql-credentials.json
     volumes:
-      - ./sql/secrets/cloudsql/:/config
+      - ./api/credentials:/config
     ports:
       - 3306:3306
