@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+import Subject from './Subject';
+
 class Dashboard extends Component {
 
     constructor(props) {
@@ -29,6 +31,7 @@ class Dashboard extends Component {
                 <main className="row justify-content-center">
                     <div className="container">
                         <p>Welcome</p>
+                        <Subject {...this.props}/>
                     </div>
                 </main>
                 <Footer messageLeft={"Welcome: "+JSON.parse(sessionStorage.getItem('user')).fname+" "+JSON.parse(sessionStorage.getItem('user')).lname} messageRight={""}/>

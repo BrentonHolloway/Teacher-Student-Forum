@@ -8,7 +8,8 @@ import Dashboard from './views/Dashboard';
 import Profile from './views/Profile';
 import Landing from './views/Landing';
 import Error404 from './views/Error404';
-import auth from './utils/auth'
+import auth from './utils/auth';
+import './css/App.css';
 
 class App extends Component {
 	render() {

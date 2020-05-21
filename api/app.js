@@ -12,6 +12,7 @@ var cors = require('cors');
 var testRouter = require('./routes/test');
 var authRouter = require('./routes/auth');
 var mediaRouter = require('./routes/media');
+var subjectRouter = require('./routes/subject');
 
 var app = express();
 
@@ -28,8 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/test', testRouter);
-app.use('/auth', authRouter)
-app.use('/media', mediaRouter)
+app.use('/auth', authRouter);
+app.use('/media', mediaRouter);
+app.use('/subject', subjectRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
