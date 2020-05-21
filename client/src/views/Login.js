@@ -22,15 +22,9 @@ class Login extends Component {
         this.state.password,
         (error) => {
             this.setState({
-                error: error
+                error: error.message
             })
-        }
-        )
-        // ).then((error) => {
-        //     this.setState({
-        //         error: error
-        //     })
-        // })
+        })
     }
     
     handleFormChange = (event) => {
@@ -70,11 +64,11 @@ class Login extends Component {
                                         </div>
 
                                         {this.state.error !== "" &&
-                                        <div className="form-group row mb-0">
-                                            <div className="col-md-6 offset-md-4 alert-danger">
-                                                <p>
+                                        <div className="form-group row">
+                                            <div className="col-md-6 offset-md-4">
+                                                <span className="alert-danger form-control">
                                                 {this.state.error}
-                                                </p>
+                                                </span>
                                             </div>
                                         </div>}
 

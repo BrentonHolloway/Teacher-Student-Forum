@@ -12,7 +12,7 @@ class Auth {
     throw new Error(res.message);
   }
   
-  login = (cb, email, password, err) => {
+  login = (cb, email, password, error) => {
     fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/auth/login', {
           method: 'post',
           headers: {
@@ -27,13 +27,13 @@ class Auth {
           if(res.status === 200) {
             return res.json()
           }
-          throw new Error('User Not Found');
+          throw new Error('Email or Password Incorrect');
         })
         .then((res) => {
           this.setSession(res);
           cb();
         })
-        .catch(err => console.error(err))
+        .catch(err => error(err));
   }
 
   setSession = (body) => {
