@@ -1,5 +1,4 @@
-import React, { Component, useCallback } from 'react';
-import {Progress} from 'reactstrap';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
