@@ -61,17 +61,19 @@ class Profile extends Component {
         return (
             <div>
             <Header items={this.props.headerItems} titleLink={this.props.titleLink} {...this.props}/>
-            <div className="container">
-                <div className="row">
-                    <div className="offset-md-3 col-md-6">
-                        <div className="form-group file">
-                            <label htmlFor="file">Upload Your Profile Picture</label>
-                            <input name="file" type="file" className="form-control" onChange={this.fileSelectedHandler}/>
+            <main className="py-4">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-md-8">
+                            <div className="form-group file">
+                                <label htmlFor="file">Upload Your Profile Picture</label>
+                                <input name="file" type="file" className="form-control" onChange={this.fileSelectedHandler}/>
+                            </div>
+                            <button className="btn btn-success btn-block" onClick={this.fileUploadHandler}>Upload</button>
                         </div>
-                        <button className="btn btn-success btn-block" onClick={this.fileUploadHandler}>Upload</button>
                     </div>
                 </div>
-            </div>
+            </main>
             <Footer messageLeft={"Forum"} messageRight={""}/>
             </div>
         )

@@ -8,6 +8,7 @@ import Dashboard from './views/Dashboard';
 import Profile from './views/Profile';
 import Landing from './views/Landing';
 import Error404 from './views/Error404';
+import Subject from './views/Subject';
 import auth from './utils/auth';
 import './css/App.css';
 
@@ -49,6 +50,7 @@ class App extends Component {
 						<PublicRoute path="/signup" component={(props) => <SignUp {...props} headerItems={auth.isAuthenticated() ? AuthHeaderProps : unAuthHeaderProps}/>}/>
 						<ProtectedRoute path="/dashboard" component={(props) => <Dashboard {...props} headerItems={AuthHeaderProps}/>}/>
 						<ProtectedRoute path="/profile" component={(props) => <Profile {...props} headerItems={AuthHeaderProps}/>}/>
+						<ProtectedRoute path="/subject/new" component={(props) => <Subject {...props} headerItems={AuthHeaderProps}/>}/>
 						<Route path="*" component={Error404}/>
 					</Switch>
 				</Router>

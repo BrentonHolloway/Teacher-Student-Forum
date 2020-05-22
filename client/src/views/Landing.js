@@ -56,29 +56,29 @@ class Landing extends Component {
         return (
             <div>
                 <Header items={this.props.headerItems} titleLink={this.props.titleLink} {...this.props}/>
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col">
-                            <h1>Welcome to the Teacher Student Forum</h1>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center">
-                        <div className="col">
-                            <p>The all in one online learning forum. Where students and teacher can collaborate and communicate effectivly</p>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center">
-                        <div className="col">
-                            <div className="row">
-                                <h3>API Server Health</h3>
+                <main className="py-4">
+                    <div className="container">
+                        <div className="row justify-content-center">
+                            <div className="col">
+                                <div className="row">
+                                    <h1>Welcome to the Teacher Student Forum</h1>
+                                </div>
+                                <div className="row">
+                                    <p>The all in one online learning forum. Where students and teacher can collaborate and communicate effectivly</p>
+                                </div>
+                                <div className="row">
+                                    <h3>API Server Health</h3>
+                                </div>
+                                <div className="row">
+                                    <ul>
+                                        <li>Server: {this.state.status}</li>
+                                        <li>Database: {this.state.database}</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <ul>
-                                <li>Server: {this.state.status}</li>
-                                <li>Database: {this.state.database}</li>
-                            </ul>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         )
     }

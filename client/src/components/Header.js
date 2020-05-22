@@ -39,15 +39,9 @@ class Header extends Component {
         this.getProfilePicture();
     }
 
-    // https://medium.com/@mahesh_joshi/reactjs-nodejs-upload-image-how-to-upload-image-using-reactjs-and-nodejs-multer-918dc66d304c
-    // https://www.npmjs.com/package/react-images
-    // https://www.npmjs.com/package/react-image
-    // https://www.npmjs.com/package/axios
-    // https://www.npmjs.com/package/multer
-
     render() {
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark header">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a href={this.props.items.title.link} className="navbar-brand col-sm-3 col md 2 mr-0">{this.props.items.title.name}</a>
                 <ul className="navbar-nav px-3 ml-auto">
                     {this.props.items.buttons.map((item, index) => (

@@ -122,12 +122,17 @@ router.post('/user', async (req, res) => {
                                     "subs.user_id = "+ req.body.id +"; ";
         }
         
-        console.log(getSubjects);
         var subjects = await pool.query(getSubjects);
-        console.log(subjects);
         res.status(200).json(subjects)
     } catch (error) {
-        console.log(error)
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.post('/new', async (req, res) => {
+    try {
+        const getUser = ""
+    } catch (error) {
         res.status(500).send({message: 'An Error Occurred'});
     }
 })

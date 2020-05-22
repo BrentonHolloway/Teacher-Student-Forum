@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -10,15 +11,33 @@ class Dashboard extends Component {
         return (
             <div>
                 <Header items={this.props.headerItems} titleLink={this.props.titleLink} {...this.props}/>
-                <main className="row justify-content-center">
+                <main className="py-4">
                     <div className="container">
-                        {JSON.parse(sessionStorage.getItem('user')).role === 1 ? null : 
-                            <div>
-                                <h3>My Subjects</h3>
-                                <UserSubjects {...this.props}/>
-                            </div>}
-                        <h3>Subjects</h3>
-                        <AllSubjects {...this.props}/>
+                        <div className="row justify-content-center">
+                            <div className="col">
+                                {JSON.parse(sessionStorage.getItem('user')).role === 1 ? null : 
+                                    <div>
+                                        <div className="row justify-content-center">
+                                            <span className="text-md-left col-6">
+                                                <h3>My Subjects</h3>
+                                            </span>
+                                            <span className="text-md-right col-6">
+                                                {JSON.parse(sessionStorage.getItem('user')).role === 2 ?
+                                                <Link to="/subject/new">
+                                                    <button className="btn btn-primary">
+                                                        Create New Subject
+                                                    </button>
+                                                </Link>
+                                                : null}
+                                            </span>
+                                        </div>
+                                        
+                                        <UserSubjects {...this.props}/>
+                                    </div>}
+                                <h3>Subjects</h3>
+                                <AllSubjects {...this.props}/>
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <Footer messageLeft={"Welcome: "+JSON.parse(sessionStorage.getItem('user')).fname+" "+JSON.parse(sessionStorage.getItem('user')).lname} messageRight={""}/>
