@@ -21,7 +21,6 @@ const createPool = async () => {
         // If connecting via unix domain socket, specify the path
         socketPath: process.env.DB_CONNECTION,
 
-
         // If connecting via TCP, enter the IP and port instead
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
@@ -123,15 +122,100 @@ router.post('/user', async (req, res) => {
         }
         
         var subjects = await pool.query(getSubjects);
-        res.status(200).json(subjects)
+        res.status(200).json(subjects);
     } catch (error) {
         res.status(500).send({message: 'An Error Occurred'});
     }
 });
 
+router.post('/subscribe', async (req, res) => {
+    try {
+        const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.user_id+";";
+        const insertSubscription = "INSERT INTO subs (user_id, subject_id) "+
+                                    "VALUES ('"+req.body.user_id+"', '"+req.body.subject_id+"');";
+        
+        var userRole = await pool.query(getUserRole);
+
+        if(userRole[0].role == 3) {
+            var subject = await pool.query(insertSubscription);
+            res.status(200).send({subject_id: subject.insertId});
+        } else {
+            res.status(403).send({message: "Access Denied"});
+        }
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occured'});
+    }
+})
+
+router.post('/unsubscribe', async (req, res) => {
+    try {
+        const getUserRole = "SELECT role FROM users WHERE users.id = "+req.body.user_id+";";
+        const removeSubscription = "DELETE FROM subs WHERE user_id = "+req.body.user_id+" AND subject_id = "+req.body.subject_id+";";
+
+        var userRole = await pool.query(getUserRole);
+
+        if(userRole[0].role == 3) {
+            await pool.query(removeSubscription);
+            res.status(200).end();
+        } else {
+            res.status(403).send({message: "Access Denied"});
+        }
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occured'});
+    }
+})
+
 router.post('/new', async (req, res) => {
     try {
-        const getUser = ""
+        const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.teacher_id+";";
+        const insertSubject = "INSERT INTO subjects (name, teacher_id, description) "+
+                                "VALUES ('"+req.body.subjectName+"', "+req.body.teacher_id+", '"+req.body.description+"');";
+
+        var userRole = await pool.query(getUserRole);
+
+        if(userRole[0].role != 2) {
+            res.status(403).send({message: "Access Denied"});
+        } else {
+            var subject = await pool.query(insertSubject);
+            res.status(200).send({subject_id: subject.insertId});
+        }
+        
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.post('/delete', async (req, res) => {
+    try {
+        const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.teacher_id+";";
+        const deleteSubject = "DELETE FROM subjects WHERE id = "+req.body.subject_id+";";
+        console.log(req);
+        console.log(getUserRole);
+        console.log(deleteSubject);
+
+        var userRole = await pool.query(getUserRole);
+
+        if(userRole[0].role === 3) {
+            res.status(403).send({message: "Access Denied"});
+        } else {
+            var subject = await pool.query(deleteSubject);
+            console.log(subject);
+            res.status(200).end();
+        }
+        
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const subjectId = req.params.id;
+        const getSubject = "SELECT * FROM subjects WHERE id = "+subjectId+";";
+
+        var subject = await pool.query(getSubject);
+
+        res.status(200).json(subject[0]);
     } catch (error) {
         res.status(500).send({message: 'An Error Occurred'});
     }

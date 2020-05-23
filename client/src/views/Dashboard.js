@@ -7,6 +7,40 @@ import AllSubjects from './AllSubjects';
 import UserSubjects from './UserSubjects';
 
 class Dashboard extends Component {
+
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+             updateUserSubjects: false,
+             updateAllSubjects: false
+        }
+    }
+    
+    updateUserSubjectsHandler = () => {
+        this.setState(prevState => ({
+            updateUserSubjects: !prevState.updateUserSubjects
+        }))
+    }
+
+    statusUserSubjectsFalse = () => {
+        this.setState({
+            updateUserSubjects: false
+        })
+    }
+
+    updateAllSubjectsHandler = () => {
+        this.setState(prevState => ({
+            updateAllSubjects: !prevState.updateAllSubjects
+        }))
+    }
+
+    statusAllSubjectsFalse = () => {
+        this.setState({
+            updateAllSubjects: false
+        })
+    }
+
     render() {
         return (
             <div>
@@ -32,10 +66,10 @@ class Dashboard extends Component {
                                             </span>
                                         </div>
                                         
-                                        <UserSubjects {...this.props}/>
+                                        <UserSubjects update={this.updateAllSubjectsHandler} updateStatus={this.state.updateUserSubjects} status={this.statusUserSubjectsFalse} {...this.props}/>
                                     </div>}
                                 <h3>Subjects</h3>
-                                <AllSubjects {...this.props}/>
+                                <AllSubjects update={this.updateUserSubjectsHandler} updateStatus={this.state.updateAllSubjects} status={this.statusAllSubjectsFalse} {...this.props}/>
                             </div>
                         </div>
                     </div>
