@@ -189,9 +189,6 @@ router.post('/delete', async (req, res) => {
     try {
         const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.teacher_id+";";
         const deleteSubject = "DELETE FROM subjects WHERE id = "+req.body.subject_id+";";
-        console.log(req);
-        console.log(getUserRole);
-        console.log(deleteSubject);
 
         var userRole = await pool.query(getUserRole);
 
@@ -199,7 +196,6 @@ router.post('/delete', async (req, res) => {
             res.status(403).send({message: "Access Denied"});
         } else {
             var subject = await pool.query(deleteSubject);
-            console.log(subject);
             res.status(200).end();
         }
         

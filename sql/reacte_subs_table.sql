@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS subs
     FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE,
     FOREIGN KEY (subject_id) REFERENCES subjects(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT subscription UNIQUE(user_id, subject_id)
 );

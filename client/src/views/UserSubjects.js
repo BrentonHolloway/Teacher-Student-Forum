@@ -7,11 +7,9 @@ class UserSubjects extends Component {
         super(props)
     
         this.state = {
-            subjects: null,
             showDeleteModal: false,
             showUnSubscribeModal: false,
             subject_id: null,
-            err: null
         }
     }
 
@@ -34,31 +32,6 @@ class UserSubjects extends Component {
         })
     }
 
-    onDeleteHandler = () => {
-        fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/subject/delete', {
-            method: 'post',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                subject_id: this.state.subject_id,
-                teacher_id: JSON.parse(sessionStorage.getItem('user')).id
-            })
-        })
-        .then((res) => {
-            if(res.status === 200) {
-                return res.json();
-            }
-
-            throw new Error('Unable to delete subject');
-        })
-        .then(this.props.update())
-        .then(this.getUserSubjects)
-        .catch(err => this.setState({err: err.message}));
-
-        this.onHideDeleteHandler();
-    }
-
     onShowUnSubscribeHandler = (event, subject_id) => {
         event.stopPropagation();
         this.setState({
@@ -74,75 +47,12 @@ class UserSubjects extends Component {
         })
     }
 
-    onUnSubscribeHandler = () => {
-        fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/subject/unsubscribe', {
-            method: 'post',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                subject_id: this.state.subject_id,
-                user_id: JSON.parse(sessionStorage.getItem('user')).id
-            })
-        })
-        .then((res) => {
-            if(res.status === 200) {
-                return res.json();
-            }
-
-            throw new Error('Unable to delete subject');
-        })
-        .then(this.props.update())
-        .then(this.getUserSubjects())
-        .catch(err => this.setState({err: err.message}));
-
-        this.onHideUnSubscribeHandler();
-    }
-    
-    getUserSubjects = () => {
-        fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/subject/user', {
-            method: 'post',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: JSON.parse(sessionStorage.getItem('user')).id,
-                role: JSON.parse(sessionStorage.getItem('user')).role
-            })
-        })
-        .then((res) => {
-            if(res.status === 200) {
-                return res.json();
-            }
-
-            throw new Error('Unable to retrieve subjects');
-        })
-        .then(res => {
-            this.setState({
-                subjects: res,
-                err: null
-            });
-        })
-        .catch(err => this.setState({subjects: null, err: err.message}));
-    }
-
-    componentDidMount() {
-        this.getUserSubjects();
-    }
-
-    componentDidUpdate() {
-        if(this.props.updateStatus === true) {
-            this.props.status();
-            this.getUserSubjects();
-        }
-    }
-
     render() {
         return (
             <div>
                 <table className="table table-hover">
                     <tbody>
-                        {this.state.subjects != null ? this.state.subjects.map((subject) => {
+                        {this.props.subjects.map((subject) => {
                             return (
                                 <tr key={subject.subject_id} className="pointer" onClick={() => this.onClickHandler(subject.subject_id)}>
                                     <th scope="row">{subject.subject_name}</th>
@@ -160,7 +70,7 @@ class UserSubjects extends Component {
                                         </td> : null}
                                 </tr>
                             )
-                        }) : null}
+                        })}
                     </tbody>
                 </table>
             
@@ -180,7 +90,10 @@ class UserSubjects extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-secondary" onClick={this.onHideDeleteHandler}>Cancel</button>
-                        <button className="btn btn-danger" onClick={this.onDeleteHandler}>Delete</button>
+                        <button className="btn btn-danger" onClick={() => {
+                            this.props.func.delete(this.state.subject_id);
+                            this.onHideDeleteHandler();
+                            }}>Delete</button>
                     </Modal.Footer>
 
                 </Modal>
@@ -201,7 +114,10 @@ class UserSubjects extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-secondary" onClick={this.onHideUnSubscribeHandler}>Cancel</button>
-                        <button className="btn btn-danger" onClick={this.onUnSubscribeHandler}>Unsubscribe</button>
+                        <button className="btn btn-danger" onClick={() => {
+                            this.props.func.unsubscribe(this.state.subject_id);
+                            this.onHideUnSubscribeHandler();
+                            }}>Unsubscribe</button>
                     </Modal.Footer>
 
                 </Modal>
