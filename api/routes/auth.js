@@ -37,9 +37,9 @@ const createPool = async () => {
 createPool();
 
 router.post('/login', async (req, res) => {
-
   try {
-    console.log(req.body);
+
+    // console.log(req.body);
     // console.log(pool.pool.config.connectionConfig);
     //Create new deposit record
     const getUserDetails = 'select * from users where email="' + req.body.email + '";';
