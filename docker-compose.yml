@@ -1,7 +1,6 @@
 version: '3.7'
 
 services:
-
 ##################################
 # Setup Node API Container       #
 ##################################
@@ -38,3 +37,11 @@ services:
     depends_on:
       - tsf-server
     command: npm start
+  
+  cloud-sql-proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.16
+    command: /cloud_sql_proxy -instances=teacher-student-forum:australia-southeast1:teacher-student-forum=tcp:3306 -credential_file=/config/sql-credentials.json
+    volumes:
+      - ./deployment:/config
+    ports:
+      - 3306:3306

@@ -1,0 +1,11 @@
+.App {
+    position: relative;
+}
+
+main {
+    padding-bottom: 2.5rem;
+}
+
+.pointer {
+    cursor: pointer;
+}

@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+##################################
+# Setup Node API Container       #
+##################################
+  tsf-server:
+    container_name: tsf-server
+    build:
+      context: ./api
+      dockerfile: Dockerfile.prod
+    image: gcr.io/teacher-student-forum/tsf-server:${VERSION}
+    environment:
+      SERVER_HOST: ${SERVER_HOST}
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    depends_on:
+      - cloud-sql-proxy
+
+##################################
+# Setup REACT Client Container   #
+##################################
+  tsf-client:
+    container_name: tsf-app
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    image: gcr.io/teacher-student-forum/tsf-app:${VERSION}
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    depends_on:
+      - tsf-server
+
+  cloud-sql-proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.16
+    command: /cloud_sql_proxy -instances=teacher-student-forum:australia-southeast1:teacher-student-forum=tcp:3306 -credential_file=/config/sql-credentials.json
+    volumes:
+      - ./api/credentials:/config
+    ports:
+      - 3306:3306

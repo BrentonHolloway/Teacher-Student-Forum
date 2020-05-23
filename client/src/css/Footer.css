@@ -1,0 +1,22 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+    text-anchor: middle;
+}
+
+.left {
+    width: 50%;
+    float: left;
+    text-align: start;
+    margin-bottom: 20px;
+}
+
+
+.right {
+    width: 50%;
+    float: right;
+    text-align: end;
+    margin-bottom: 20px;
+}
