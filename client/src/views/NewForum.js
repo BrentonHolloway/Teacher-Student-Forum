@@ -2,33 +2,32 @@ import React, { Component } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-class NewSubject extends Component {
+class NewForum extends Component {
     constructor(props) {
         super(props)
     
         this.state = {
-             subjectName: "",
-             description: "",
-             err: ""
-        }
+            forumName: "",
+            description: "",
+            err: ""
+       }
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
 
         try {
-
-            if(this.state.subjectName.length < 1) {
+            if(this.state.forumName.length < 1) {
                 throw new Error('Subject Name Is Empty')
             }
 
-            fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/subject/new', {
+            fetch(process.env.REACT_APP_API_SERVER_ADDRESS+'/subject/'+this.props.match.params.subjectId+'/forum/new', {
                 method: 'post',
                 headers: {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    subjectName: this.state.subjectName,
+                    forumName: this.state.forumName,
                     description: this.state.description,
                     teacher_id: JSON.parse(sessionStorage.getItem('user')).id
                 })
@@ -37,19 +36,19 @@ class NewSubject extends Component {
                     return res.json()
                 }
     
-                throw new Error('Insert subject');
+                throw new Error('Error Creating Forum');
             }).then(res => {
-                this.props.history.push("/subject/"+res.subject_id);
-            });
+                this.props.history.push("/subject/"+this.props.match.params.subjectId+'/forum/'+res.forum_id);
+            })
+            .catch(err => this.setState({err: err.message}));
+
         } catch (error) {
             this.setState({err: error.message})
         }
-
-        
     }
 
     handleCancel = () => {
-        this.props.history.push("/dashboard")
+        this.props.history.push("/subject/"+this.props.match.params.subjectId)
     }
 
     handleFormChange = (event) => {
@@ -58,6 +57,7 @@ class NewSubject extends Component {
         });
     }
     
+
     render() {
         return (
             <div>
@@ -68,10 +68,10 @@ class NewSubject extends Component {
                             <div className="col-md-8">
                                 <form>
                                     <div className="form-group row">
-                                        <label htmlFor="subjectName" className="col-md-4 col-form-label text-md-right">Subject Name: </label>
+                                        <label htmlFor="forumName" className="col-md-4 col-form-label text-md-right">Forum Name: </label>
 
                                         <div className="col-md-6">
-                                            <input type="text" name="subjectName" id="subjectName" className="form-control" placeholder="Subject Name" value={this.state.subjectName} onChange={this.handleFormChange}/>
+                                            <input type="text" name="forumName" id="forumName" className="form-control" placeholder="Subject Name" value={this.state.forumName} onChange={this.handleFormChange}/>
                                         </div>
                                     </div>
 
@@ -99,8 +99,8 @@ class NewSubject extends Component {
                                                     Submit
                                                 </button>
                                             </span>
-                                            <span className="px-1">
-                                                <button className="btn btn-warning" onClick={this.handleCancel}>
+                                            <span className="px-1" onClick={this.handleCancel}>
+                                                <button className="btn btn-warning">
                                                     Cancel
                                                 </button>
                                             </span>
@@ -117,5 +117,4 @@ class NewSubject extends Component {
     }
 }
 
-export default NewSubject
-
+export default NewForum

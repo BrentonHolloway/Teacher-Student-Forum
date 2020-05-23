@@ -23,7 +23,7 @@ class AllSubjects extends Component {
                                     <td>{subject.subject_description}</td>
                                     <td><img className="profile px-1" src={'https://storage.googleapis.com/teacher-student-forum-files/'+subject.teacher_profile} alt={"Profile-"+subject.teacher_id+'-'+subject.teacher_fname}/>{subject.teacher_fname} {subject.teacher_lname}</td>
                                     {JSON.parse(sessionStorage.getItem('user')).role === 3 ?
-                                    <td>
+                                    <td className="text-md-right">
                                         <button className="btn btn-success" onClick={() => this.props.func.subscribe(subject.subject_id)}>Subscribe</button>
                                     </td> : null}
                                 </tr>

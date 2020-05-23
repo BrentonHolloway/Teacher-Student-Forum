@@ -91,9 +91,9 @@ router.post('/all', async (req, res) => {
 
 router.post('/user', async (req, res) => {
     try {
-        if(req.body.role == 1) { // admin
+        if(req.body.role === 1) { // admin
             res.status(403).send({message: 'Permission Denied'});
-        }else if(req.body.role == 2) { // teacher
+        }else if(req.body.role === 2) { // teacher
             var getSubjects = "SELECT "+
                                     "id AS subject_id, "+
                                     "name AS subject_name, "+
@@ -103,7 +103,9 @@ router.post('/user', async (req, res) => {
                                     "subjects "+
                                 "WHERE "+
                                     "teacher_id = "+ req.body.id +";";
-        }else if(req.body.role == 3) { // student
+            var subjects = await pool.query(getSubjects);
+            res.status(200).json(subjects);
+        }else if(req.body.role === 3) { // student
             var getSubjects = "SELECT "+
                                     "subjects.id AS subject_id, "+
                                     "subjects.name AS subject_name, "+
@@ -119,10 +121,9 @@ router.post('/user', async (req, res) => {
                                 "JOIN users ON subjects.teacher_id = users.id "+
                                 "WHERE "+
                                     "subs.user_id = "+ req.body.id +"; ";
+            var subjects = await pool.query(getSubjects);
+            res.status(200).json(subjects);
         }
-        
-        var subjects = await pool.query(getSubjects);
-        res.status(200).json(subjects);
     } catch (error) {
         res.status(500).send({message: 'An Error Occurred'});
     }
@@ -216,5 +217,125 @@ router.get('/:id', async (req, res) => {
         res.status(500).send({message: 'An Error Occurred'});
     }
 })
+
+router.get('/:subjectId/forum', async (req, res) => {
+    try {
+        const getForums = "SELECT * FROM forums WHERE subject_id = "+req.params.subjectId+";";
+        var forum = await pool.query(getForums);
+
+        res.status(200).json(forum);
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+})
+
+router.get('/:subjectId/forum/:forumId', async (req, res) => {
+    try {
+        const getForums = "SELECT * FROM forums WHERE subject_id = "+req.params.subjectId+" AND id = "+req.params.forumId+";";
+        
+        var forum = await pool.query(getForums);
+
+        res.status(200).json(forum[0]);
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.post('/:subjectId/forum/new', async (req, res) => {
+    try {
+        const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.teacher_id+";";
+        console.log(getUserRole)
+        const insertForum = "INSERT INTO forums (subject_id, name, description) "+
+                                "VALUES ("+req.params.subjectId+", '"+req.body.forumName+"', '"+req.body.description+"');";
+        console.log(insertForum)
+        var userRole = await pool.query(getUserRole);
+
+        if(userRole[0].role != 2) {
+            res.status(403).send({message: "Access Denied"});
+        } else {
+            var forum = await pool.query(insertForum);
+            res.status(200).send({forum_id: forum.insertId});
+        }
+        
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.post('/:subjectId/forum/delete', async (req, res) => {
+    try {
+        const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.teacher_id+";";
+        const deleteForum = "DELETE FROM forums WHERE id = "+req.body.forum_id+";";
+
+        var userRole = await pool.query(getUserRole);
+
+        if(userRole[0].role === 3) {
+            res.status(403).send({message: "Access Denied"});
+        } else {
+            await pool.query(deleteForum);
+            res.status(200).end();
+        }
+        
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.get('/:subjectId/forum/:forumId/messages', async (req, res) => {
+    try {
+        //const getMessages = "SELECT * FROM messages WHERE forum_id = "+req.params.forumId+";";
+        const getMessages = "SELECT "+
+                                "messages.id, "+
+                                "messages.message, "+
+                                "messages.created_at, "+
+                                "messages.updated_at, "+
+                                "users.id AS user_id, "+
+                                "users.first_name AS fname, "+
+                                "users.last_name AS lname, "+
+                                "users.role, "+
+                                "users.email, "+
+                                "users.profile "+
+                            "FROM messages "+
+                            "JOIN users ON messages.user_id = users.id "+
+                            "WHERE messages.forum_id = "+req.params.forumId+" "+
+                            "ORDER BY messages.created_at DESC;";
+
+        var messages = await pool.query(getMessages);
+
+        res.status(200).json(messages);
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
+
+router.post('/:subjectId/forum/:forumId/message/post', async (req, res) => {
+    try {
+        const postMessage = "INSERT INTO messages (user_id, forum_id, message) "+
+                            "VALUES ("+req.body.user_id+", "+req.params.forumId+", '"+req.body.message+"');";
+        var m = await pool.query(postMessage);
+
+        const getMessage = "SELECT "+
+                            "messages.id, "+
+                            "messages.message, "+
+                            "messages.created_at, "+
+                            "messages.updated_at, "+
+                            "users.id AS user_id, "+
+                            "users.first_name AS fname, "+
+                            "users.last_name AS lname, "+
+                            "users.role, "+
+                            "users.email, "+
+                            "users.profile "+
+                        "FROM messages "+
+                        "JOIN users ON messages.user_id = users.id "+
+                        "WHERE messages.id = "+m.insertId+" "+
+                        "ORDER BY messages.created_at DESC;";
+        var message = await pool.query(getMessage);
+        
+        res.status(200).json(message[0]);
+        
+    } catch (error) {
+        res.status(500).send({message: 'An Error Occurred'});
+    }
+});
 
 module.exports = router;
