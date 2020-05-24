@@ -75,7 +75,6 @@ class Forum extends Component {
                 throw new Error('Unable to Post Comment');
             })
             .then(res => {
-                console.log(res)
                 this.setState(prevState => ({
                     messages: res.concat(prevState.messages),
                     message: ""

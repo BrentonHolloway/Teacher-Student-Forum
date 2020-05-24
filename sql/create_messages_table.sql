@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS messages
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (forum_id) REFERENCES forums(id)
         ON DELETE CASCADE
-)
+);

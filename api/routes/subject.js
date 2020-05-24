@@ -244,10 +244,8 @@ router.get('/:subjectId/forum/:forumId', async (req, res) => {
 router.post('/:subjectId/forum/new', async (req, res) => {
     try {
         const getUserRole = "SELECT role FROM users WHERE users.id ="+req.body.teacher_id+";";
-        console.log(getUserRole)
         const insertForum = "INSERT INTO forums (subject_id, name, description) "+
                                 "VALUES ("+req.params.subjectId+", '"+req.body.forumName+"', '"+req.body.description+"');";
-        console.log(insertForum)
         var userRole = await pool.query(getUserRole);
 
         if(userRole[0].role != 2) {
@@ -331,7 +329,7 @@ router.post('/:subjectId/forum/:forumId/message/post', async (req, res) => {
                         "ORDER BY messages.created_at DESC;";
         var message = await pool.query(getMessage);
         
-        res.status(200).json(message[0]);
+        res.status(200).send(message);
         
     } catch (error) {
         res.status(500).send({message: 'An Error Occurred'});
