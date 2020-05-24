@@ -12,26 +12,25 @@ router.use(bodyParser.json());
 
 let pool;
 const createPool = async () => {
-  pool = await mysql.createPool({
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
+    pool = await mysql.createPool({
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
 
-    database: process.env.DB_NAME,
-    
-    // If connecting via unix domain socket, specify the path
-    socketPath: process.env.DB_CONNECTION,
+        database: process.env.DB_NAME,
 
-    
-    // If connecting via TCP, enter the IP and port instead
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+        // If connecting via unix domain socket, specify the path
+        socketPath: process.env.DB_CONNECTION,
 
-    connectionLimit: 5,
-    connectTimeout: 10000,
-    acquireTimeout: 10000,
-    waitForConnections: true,
-    queueLimit: 0,
-  });
+        // If connecting via TCP, enter the IP and port instead
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+
+        connectionLimit: 5,
+        connectTimeout: 10000,
+        acquireTimeout: 10000,
+        waitForConnections: true,
+        queueLimit: 0,
+    });
 
 };
 createPool();
@@ -39,13 +38,14 @@ createPool();
 router.post('/login', async (req, res) => {
   try {
 
-    // console.log(req.body);
+    console.log(req.body);
     // console.log(pool.pool.config.connectionConfig);
     //Create new deposit record
-    const getUserDetails = 'select * from users where email="' + req.body.email + '";';
-
+    const getUserDetails = "SELECT * FROM users WHERE email = '"+req.body.email+"';";
+    console.log(getUserDetails);
     //Run query - fetch response
     var userDetails = await pool.query(getUserDetails);
+    console.log(userDetails)
 
     if (userDetails.length < 1) {
       res.status(403).send({message: 'Unkown E-Mail'});
@@ -66,6 +66,7 @@ router.post('/login', async (req, res) => {
       res.status(403).send({message: 'Incorrect Password'});
     }
   } catch (err) {
+    console.log(err)
     res.status(500).send({message: 'Connection error!'});
   }
 });
